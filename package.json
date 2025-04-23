@@ -7,11 +7,15 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "bootstrap": "^5.3.5",
+    "bootstrap-vue-3": "^0.5.1",
+    "pinia": "^3.0.2",
     "vue": "^3.2.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "pinia-plugin-persistence": "^0.0.2",
     "typescript": "~4.5.5"
   },
   "browserslist": [
