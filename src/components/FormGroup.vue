@@ -1,10 +1,10 @@
 <template>
     <div class="form-group">
-        <form-input placeholder="Значение" :maxLength="50"/>
-        <form-select :options="options" selectedValue="local"/>
+        <form-input placeholder="Значение" :maxLength="50" name="mark" @valid="valid"/>
+        <form-select :options="options" name="type" @valid="valid"/>
         <div class="form-inputs d-flex">
-            <form-input placeholder="Логин"/>
-            <form-input placeholder="Пароль" type="password"/>
+            <form-input placeholder="Логин" name="login" required @valid="valid"/>
+            <form-input placeholder="Пароль" name="password" required type="password" @valid="valid"/>
         </div>
         <div class="form-delete">
             <svg class="form-delete__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,14 +15,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { Validation } from "@/types";
 import FormInput from "@/components/FormInput.vue";
 import FormSelect from "@/components/FormSelect.vue";
 
-const valid = (r) => {
-    console.log(r);
-    
+const emit = defineEmits(["valid"]);
+
+const isValidForm = ref(false);
+const checkValidation = ref<Validation[]>([
+    {
+        name: "mark",
+        valid: false,
+    },
+    {
+        name: "type",
+        valid: true,
+    },
+    {
+        name: "login",
+        valid: false,
+    },
+    {
+        name: "password",
+        valid: false,
+    },
+]);
+
+const valid = (value: Validation) => {
+    checkValidation.value = checkValidation.value.filter(item => item.name !== value.name)
+    checkValidation.value.push(value)
 }
+
+watch(() => checkValidation.value, () => {
+    isValidForm.value = checkValidation.value.every(item => item.valid)
+    isValidForm.value && emit("valid");
+})
 
 const options = ref([
     {

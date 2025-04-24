@@ -4,7 +4,8 @@
             class="form-control"
             :class="{ 'form-error': !isValid }"
             v-model="value" 
-            :type="type" 
+            :type="type"
+            :name="name"
             :placeholder="placeholder"
             @blur="onBlur">
     </div>
@@ -25,6 +26,14 @@
         maxLength: {
             type: Number,
             default: 100,
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        required: {
+            type: Boolean,
+            default: false,
         }
     })
 
@@ -35,7 +44,10 @@
 
     const onBlur = () => {
         isValid.value = props.maxLength >= value.value.length;
-        emit("valid", isValid.value);
+        if(!value.value && props.required) {
+            isValid.value = false;
+        }
+        emit("valid", { name: props.name, valid: isValid.value });
     }
 </script>
 
