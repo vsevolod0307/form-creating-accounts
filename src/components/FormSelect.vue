@@ -1,5 +1,5 @@
 <template>
-    <select class="select form-select" v-model="value" @change="onChange">
+    <select class="select form-select" v-model="modelValue" @change="onChange">
         <option 
             v-for="(option, index) in options" 
             :key="index" 
@@ -19,7 +19,7 @@
         },
         selectedValue: {
             type: String,
-            default: "local"
+            default: ""
         },
         name: {
             type: String,
@@ -30,10 +30,10 @@
     const emit = defineEmits(["valid"])
 
     const isValid =  ref(true);
-    const value = ref(props.selectedValue);
+    const modelValue = ref(props.selectedValue);
 
     const onChange = () => {
-        isValid.value = !!value.value;
-        emit("valid", { name: props.name, valid: isValid.value });
+        isValid.value = !!modelValue.value;
+        emit("valid", { name: props.name, valid: isValid.value, value: modelValue.value });
     }
 </script>

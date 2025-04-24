@@ -1,9 +1,15 @@
 <template>
     <div class="form-add">
         <h2>Учётные записи</h2>
-        <button class="form-add__btn btn btn-outline-secondary">+</button>
+        <button class="form-add__btn btn btn-outline-secondary" @click="store.addForm">+</button>
     </div>
 </template>
+
+<script setup lang="ts">
+import { useMainStore } from "@/store";
+
+const store = useMainStore();
+</script>
 
 <style scoped>
     .form-add {

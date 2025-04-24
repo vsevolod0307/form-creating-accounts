@@ -3,12 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from "./store";
 import FormCreating from "@/components/FormCreating.vue";
-
-const store = useMainStore();
-
-
 </script>
 
 <style>

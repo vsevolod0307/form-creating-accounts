@@ -9,17 +9,53 @@
                 Для указания нескольких меток для одной пары логин/пароль используйте разделитель ;
             </div>
         </div>
-        <form-group @valid="valid"/>
+        <div class="form-header">
+            <div class="form-header__title">Метки</div>
+            <div class="form-header__title">Тип записи</div>
+            <div class="form-header__title">Логин</div>
+            <div class="form-header__title">Пароль</div>
+        </div>
+        <form-group v-for="form in forms" :data="form" :key="form.id" @valid="valid(form.id, $event)"/>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { Validation } from "@/types";
+import { ref, computed } from "vue";
+import { useMainStore } from "@/store";
+import { Validation, Data } from "@/types";
 import FormAdd from "@/components/FormAdd.vue";
 import FormGroup from "@/components/FormGroup.vue";
 
-const valid = () => {
+const store = useMainStore();
+
+const forms = computed(() => store.data);
+
+const valid = (id: number, data: Validation[]) => {
+    let resultData: Data = {
+        id,
+        mark: [{ text: "" }],
+        type: "",
+        login: "",
+        password: "",
+    };
+    
+    data.forEach(item => {
+        if(item.value) {
+            if(item.name === "mark") {
+                resultData[item.name] = item.value.split(";").map(item => ({ text: item }))
+            }
+
+            if(item.name === "login" || item.name === "password" || item.name === "type") {
+                resultData[item.name] = item.value;
+            }
+
+            if(item.name === "type" && item.value === "ldap") {
+                resultData.password = null;
+            }
+        }
+    })
+    
+    store.updateForm(id, resultData)
     
 }
 </script>
@@ -27,5 +63,18 @@ const valid = () => {
 <style scoped>
     .main-alert {
         width: 20px;
+    }
+
+    .form-header {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        align-items: center;
+        justify-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .form-header__title {
+        font-size: 12px;
+        font-weight: 600;
     }
 </style>

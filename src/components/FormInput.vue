@@ -34,12 +34,16 @@
         required: {
             type: Boolean,
             default: false,
+        },
+        formValue: {
+            type: String,
+            default: "",
         }
     })
 
     const emit = defineEmits(["valid"])
 
-    const value = ref("");
+    const value = ref(props.formValue);
     const isValid =  ref(true);
 
     const onBlur = () => {
@@ -47,7 +51,7 @@
         if(!value.value && props.required) {
             isValid.value = false;
         }
-        emit("valid", { name: props.name, valid: isValid.value });
+        emit("valid", { name: props.name, valid: isValid.value, value: value.value });
     }
 </script>
 
