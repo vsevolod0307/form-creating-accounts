@@ -32,7 +32,7 @@ const emit = defineEmits(["valid"]);
 const store = useMainStore();
 const isValidForm = ref(false);
 const selectedLocal = ref(true);
-const isLocal = computed(() => props.data?.type === "local" && selectedLocal.value)
+const isLocal = computed(() => props.data?.type === "local" || selectedLocal.value)
 const checkValidation = ref<Validation[]>([
     {
         name: "mark",
@@ -56,7 +56,7 @@ const checkValidation = ref<Validation[]>([
     },
 ]);
 
-
+selectedLocal.value = props.data?.type === "local";
 
 const marks = computed(() => props.data?.mark.map(i => i.text).join(";"));
 
@@ -65,7 +65,7 @@ const valid = (value: Validation) => {
     checkValidation.value.push(value)
     if(value.name === "type") {
         selectedLocal.value = value.value === "local";
-    }
+    }  
 }
 
 watch(() => checkValidation.value, () => {
